@@ -84,7 +84,7 @@ public class Ramen{
         this.noodleType = noodle.values()[noodleType-1];
     }
 
-    public void setSpice(boolean input){
+    public void setSpicy(boolean input){
         this.spicy = input;
     }
 
