@@ -1,4 +1,5 @@
 package com.pluralsight.items;
 
-public class Drink {
+public class Drink{
+
 }
