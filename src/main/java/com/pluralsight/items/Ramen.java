@@ -115,4 +115,16 @@ public class Ramen{
     public boolean isSpicy() {
         return spicy;
     }
+
+    public List<Topping.meat> getMeats() {
+        return meats;
+    }
+
+    public List<Topping.vegetable> getVegetables() {
+        return vegetables;
+    }
+
+    public List<Topping.premium> getPremiums() {
+        return premiums;
+    }
 }
