@@ -1,8 +1,9 @@
 package com.pluralsight.items;
 
+import com.pluralsight.util.OrderItem;
 import java.util.List;
 
-public class Ramen{
+public class Ramen implements OrderItem {
     public enum bowlSize{
         SMALL("1) Small - 27 fl oz", 10),
         MEDIUM("2) Medium - 35 fl oz", 15),
@@ -126,5 +127,15 @@ public class Ramen{
 
     public List<Topping.premium> getPremiums() {
         return premiums;
+    }
+
+    @Override
+    public double price(){
+        // calculate price
+    }
+
+    @Override
+    public String description(){
+        // desc of Ramen item
     }
 }
