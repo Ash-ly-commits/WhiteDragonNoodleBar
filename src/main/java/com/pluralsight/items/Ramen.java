@@ -69,7 +69,7 @@ public class Ramen{
             return price;
         }
     }
-
+    //parts of Ramen, add more getters in a bit & maybe make some final?
     private bowlSize size;
     private broth brothType;
     private noodle noodleType;
@@ -77,15 +77,27 @@ public class Ramen{
     private List<Topping.vegetable> vegetables;
     private List<Topping.premium> premiums;
     private boolean spicy;
-
+    //constructor establishing base
     public Ramen(int size, int brothType, int noodleType){
         this.size = bowlSize.values()[size-1];
         this.brothType = broth.values()[brothType-1];
         this.noodleType = noodle.values()[noodleType-1];
     }
-
+    // setters
     public void setSpicy(boolean input){
         this.spicy = input;
+    }
+
+    public void setMeats(List<Topping.meat> meats){
+        this.meats = meats;
+    }
+
+    public void setVegetables(List<Topping.vegetable> vegetables){
+        this.vegetables = vegetables;
+    }
+
+    public void setPremiums(List<Topping.premium> premiums){
+        this.premiums = premiums;
     }
 
     public bowlSize getSize() {
