@@ -70,7 +70,7 @@ public class UserInterface {
                 System.out.println("Guess you're not hungry today...");
                 return;
             }
-            Order order; // expand on Order to tie it in
+            Order order;
             switch (option) { // cases are work in progress lol
                 case 1 -> {
                     Ramen ramen = new Ramen(promptForSize(), promptForBroth(), promptForNoodle());
@@ -78,6 +78,7 @@ public class UserInterface {
                     ramen.setMeats(promptForMeats());
                     ramen.setVegetables(promptForVegetables());
                     ramen.setPremiums(promptForPremiumToppings());
+                    order.addRamen(ramen);
                 }
                 case 2 -> // add Drink
                 case 3 -> // add Appetizer
