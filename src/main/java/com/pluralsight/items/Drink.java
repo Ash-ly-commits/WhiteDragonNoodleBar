@@ -53,8 +53,8 @@ public class Drink implements OrderItem {
         }
     }
 
-    private drinkType type;
-    private drinkSize size;
+    private final drinkType type;
+    private final drinkSize size;
 
     public Drink(int type, int size){
         this.type = drinkType.values()[type-1];
@@ -77,8 +77,8 @@ public class Drink implements OrderItem {
 
     @Override
     public String description(){
-        return (type == null)? null
-                : (type.getName() + " - $" + type.getPrice()) + ",\n" +
+        return (type == null)? null :
+                (type.getName() + " - $" + type.getPrice()) + ",\n" +
                 (size.getName() + " - $" + size.getPrice());
     }
 }

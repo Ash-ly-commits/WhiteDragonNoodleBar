@@ -29,7 +29,7 @@ public class Appetizer implements OrderItem {
         }
     }
 
-    private appetizerType type;
+    private final appetizerType type;
 
     public Appetizer(int type){
         this.type = appetizerType.values()[type-1];

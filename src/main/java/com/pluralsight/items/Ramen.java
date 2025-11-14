@@ -73,9 +73,9 @@ public class Ramen implements OrderItem {
         }
     }
     //parts of Ramen, add more getters in a bit & maybe make some final?
-    private bowlSize size;
-    private broth brothType;
-    private noodle noodleType;
+    private final bowlSize size;
+    private final broth brothType;
+    private final noodle noodleType;
     private List<Topping.meat> meats;
     private List<Topping.vegetable> vegetables;
     private List<Topping.premium> premiums;
