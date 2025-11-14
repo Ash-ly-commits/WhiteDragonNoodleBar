@@ -2,6 +2,7 @@ package com.pluralsight.items;
 
 import com.pluralsight.util.OrderItem;
 import java.util.List;
+import java.util.Objects;
 
 public class Ramen implements OrderItem {
     public enum bowlSize{
@@ -130,8 +131,27 @@ public class Ramen implements OrderItem {
     }
 
     @Override
-    public double price(){
-        // calculate price
+    public double price() {
+        double basePrice = (size != null ? size.getPrice() : 0) +
+                (brothType != null ? brothType.getPrice() : 0) +
+                (noodleType != null ? noodleType.getPrice() : 0);
+
+        double meatsPrice = (meats == null) ? 0.0 : meats.stream()
+                .filter(Objects::nonNull) // filters out any null entries
+                .mapToDouble(Topping.meat::getPrice) // converts all objects in stream to double by getting its price
+                .sum();
+
+        double vegPrice = (vegetables == null) ? 0.0 : vegetables.stream()
+                .filter(Objects::nonNull)
+                .mapToDouble(Topping.vegetable::getPrice)
+                .sum();
+
+        double premiumsPrice = (premiums == null) ? 0.0 : premiums.stream()
+                .filter(Objects::nonNull)
+                .mapToDouble(Topping.premium::getPrice)
+                .sum();
+
+        return basePrice + meatsPrice + vegPrice + premiumsPrice;
     }
 
     @Override

@@ -91,10 +91,11 @@ public class UserInterface {
             }
         }
     }
+
 // set up for Ramen base
     public int promptForSize() {
-        for (Ramen.bowlSize b : Ramen.bowlSize.values()) {
-            System.out.println(b.getName() + "  $" + b.getPrice());
+        for (Ramen.bowlSize s : Ramen.bowlSize.values()) {
+            System.out.println(s.getName() + "  $" + s.getPrice());
         }
         int[] valid = {1, 2, 3};
         return screenMenuValidation("\tThese are the sizes and prices.\nPick a number: ", valid);
@@ -109,8 +110,8 @@ public class UserInterface {
     }
 
     public int promptForNoodle() {
-        for (Ramen.noodle b : Ramen.noodle.values()) {
-            System.out.println(b.getName());
+        for (Ramen.noodle n : Ramen.noodle.values()) {
+            System.out.println(n.getName());
         }
         int[] valid = {1, 2, 3, 4, 5};
         return screenMenuValidation("\tThese are the noodle types.\nPick a number: ", valid);
@@ -126,8 +127,8 @@ public class UserInterface {
         List<Topping.meat> meats = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             int[] valid = {0,1,2,3,4};
-            for(Topping.meat b: Topping.meat.values()){
-                System.out.println(b.getName());
+            for(Topping.meat m: Topping.meat.values()){
+                System.out.println(m.getName());
             }
             int option = screenMenuValidation("\tThese are the meat options.\nPick a number or 0 if done: ",valid);
             if (option == 0) {
@@ -144,12 +145,13 @@ public class UserInterface {
         }
         return meats;
     }
+
     public List<Topping.vegetable> promptForVegetables(){
         List<Topping.vegetable> vegetables = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             int[] valid = {0,1,2,3,4};
-            for(Topping.vegetable b: Topping.vegetable.values()){
-                System.out.println(b.getName());
+            for(Topping.vegetable v: Topping.vegetable.values()){
+                System.out.println(v.getName());
             }
             int option = screenMenuValidation("\tThese are the vegetable options.\nPick a number or 0 if done: ",valid);
             if (option == 0) {
@@ -171,8 +173,8 @@ public class UserInterface {
         List<Topping.premium> premium = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             int[] valid = {0,1,2,3,4};
-            for(Topping.premium b: Topping.premium.values()){
-                System.out.println(b.getName() + "  $" + b.getPrice());
+            for(Topping.premium p: Topping.premium.values()){
+                System.out.println(p.getName() + "  $" + p.getPrice());
             }
             int option = screenMenuValidation("\tThese are the premium topping options.\nPick a number or 0 if done: ",valid);
             if (option == 0) {
@@ -189,18 +191,19 @@ public class UserInterface {
         }
         return premium;
     }
+
     // set up for drinks
     public int promptForDrinkType(){
-        for(Drink.drinkType b: Drink.drinkType.values()){
-            System.out.println(b.getName() + " $" + b.getPrice());
+        for(Drink.drinkType d: Drink.drinkType.values()){
+            System.out.println(d.getName() + " $" + d.getPrice());
         }
         int[] valid = {1,2,3};
         return screenMenuValidation("\tThese are the drink options and cost.\nPick a number: ",valid);
     }
 
     public int promptForDrinkSize(){
-        for(Drink.drinkSize b: Drink.drinkSize.values()){
-            System.out.println(b.getName() + " Additional $" + b.getPrice());
+        for(Drink.drinkSize d: Drink.drinkSize.values()){
+            System.out.println(d.getName() + " Additional $" + d.getPrice());
         }
         int[] valid = {1,2,3};
         return screenMenuValidation("\tThese are the sizes and additional costs.\nPick a number: ",valid);
