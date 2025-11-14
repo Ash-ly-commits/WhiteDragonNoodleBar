@@ -4,9 +4,9 @@ import com.pluralsight.util.OrderItem;
 
 public class Drink implements OrderItem {
     public enum drinkSize{
-        SMALL("1) Small - 16 fl oz", 0),
-        MEDIUM("2) Medium - 20 fl oz", 0),
-        LARGE("3) Large - 24 fl oz", 2);
+        SMALL("1. Small - 16 fl oz", 0),
+        MEDIUM("2. Medium - 20 fl oz", 0),
+        LARGE("3. Large - 24 fl oz", 2);
 
         private final String name;
         private final int price;
@@ -26,15 +26,15 @@ public class Drink implements OrderItem {
     }
 
     public enum drinkType{
-        WATER("1) Water",0),
-        COKE("2) Coke (NOT Diet)",3),
-        PEPSI("3) Pepsi (NOT Diet)",3),
-        MATCHA("4) Matcha - warm",6),
-        RAMUNE("5) Ramune - Japanese citrus soft drink",4),
-        SAPPORO("6) Sapporo - Japanese lager",7),
-        ASAHI("7) Asahi Super Dry - Japanese pale lager",7),
-        SAKE("8) Sake - Japanese alcohol",7),
-        SOJU("9) Soju - Korean distilled spirit",7);
+        WATER("1. Water",0),
+        COKE("2. Coke (NOT Diet)",3),
+        PEPSI("3. Pepsi (NOT Diet)",3),
+        MATCHA("4. Matcha - warm",6),
+        RAMUNE("5. Ramune - Japanese citrus soft drink",4),
+        SAPPORO("6. Sapporo - Japanese lager",7),
+        ASAHI("7. Asahi Super Dry - Japanese pale lager",7),
+        SAKE("8. Sake - Japanese alcohol",7),
+        SOJU("9. Soju - Korean distilled spirit",7);
 
         private final String name;
         private final int price;

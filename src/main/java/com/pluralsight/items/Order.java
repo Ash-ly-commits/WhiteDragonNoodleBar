@@ -54,4 +54,15 @@ public class Order {
                 .map(i -> (Appetizer) i)
                 .collect(Collectors.toList());
     }
+
+    public String getOrderSummary() {
+        StringBuilder sb = new StringBuilder();
+        int count = 1;
+        for (OrderItem i : items) {
+            sb.append(count).append(") ").append(i.description()).append("\n");
+            count++;
+        }
+        sb.append("\nTotal: $").append(String.format("%.2f", getTotal()));
+        return sb.toString();
+    }
 }
