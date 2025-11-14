@@ -1,6 +1,8 @@
 package com.pluralsight.items;
 
-public class Drink{
+import com.pluralsight.util.OrderItem;
+
+public class Drink implements OrderItem {
     public enum drinkSize{
         SMALL("Small - 16 fl oz", 0),
         MEDIUM("Medium - 20 fl oz", 0),
@@ -49,5 +51,31 @@ public class Drink{
         public int getPrice(){
             return price;
         }
+    }
+
+    private drinkType type;
+    private drinkSize size;
+
+    Drink(int type, int size){
+        this.type = drinkType.values()[type-1];
+        this.size = drinkSize.values()[type-1];
+    }
+
+    public drinkType getType() {
+        return type;
+    }
+
+    public drinkSize getSize() {
+        return size;
+    }
+
+    @Override
+    public double price(){
+        // calculate price
+    }
+
+    @Override
+    public String description(){
+        // Drink description
     }
 }
