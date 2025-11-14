@@ -46,11 +46,12 @@ public class UserInterface {
 
     public void homeScreen() {
         String homeScreenMenu = """
-                \nWhite Dragon Noodle Bar
-                ~ Welcome! ~
+                \n\033[0;1m White Dragon Noodle Bar \033[0m
+                \033[0;1m ~ Welcome! ~ \033[0m
+                -----------------------------------
                 1) New Order
                 0) Exit
-                Enter option:\t"""; //this can be nicer soon....
+                Enter option:\t""";
         while (chooseInt(homeScreenMenu, yesNo) != 0) orderMenuScreen();
         System.out.println("Exiting...");
     }
@@ -109,11 +110,13 @@ public class UserInterface {
                 case 5 -> {
                     if (order.getTotal() == 0) continue;
                     System.out.println("\nHere is your order:\n" + order.getOrderSummary());
-                    int confirm = chooseInt("Place order?\nPick 1 if yes, 0 if no: ", yesNo);
-                    if (confirm == 1) {
-                        new ReceiptWriter().saveReceipt(order);
-                        System.out.println("Order placed. Thank you!");
-                    } else System.out.println("Order cancelled.");
+                    // CheckoutDialog below creates cute & small pop up with order summary
+                    if (CheckoutDialog.showCheckout(null, order.getOrderSummary())) {
+                        String path = new ReceiptWriter().saveReceipt(order);
+                        System.out.println("Order placed. Receipt saved to: " + path);
+                    } else {
+                        System.out.println("Order cancelled.");
+                    }
                     return;
                 }
             }
@@ -124,7 +127,7 @@ public class UserInterface {
     private Ramen promptForSignature() {
         int option = chooseInt("""
                 \nHere are our specials!
-                ------------------------------
+                -----------------------------------
                 - Tonkotsu Deluxe Special -
                 Medium bowl
                 Tonkotsu broth
@@ -159,7 +162,7 @@ public class UserInterface {
             System.out.printf("Price: $%.2f%n", r.price());
             int choice = chooseInt("""
                     \nSignature Options:
-                    ---------------------
+                    -----------------------------------
                     1) Remove Meat
                     2) Add Meat
                     3) Remove Vegetable
