@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class Order {
     private List<OrderItem> items;
 
-    Order(){
+    public Order(){
         items = new ArrayList<>();
     }
 

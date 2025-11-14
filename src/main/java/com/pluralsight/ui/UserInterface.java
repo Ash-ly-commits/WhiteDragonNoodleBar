@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.pluralsight.items.*;
+import com.pluralsight.util.ReceiptWriter;
 
 public class UserInterface {
     Scanner scanner = new Scanner(System.in);
+    private final int[] yesNo = {1, 0};
 
     public int askUserInt(String prompt) {
         while (true) {
@@ -69,7 +71,7 @@ public class UserInterface {
                 System.out.println("Guess you're not hungry today...");
                 return;
             }
-            Order order;
+            Order order = new Order();
             switch (option) { // cases are work in progress lol
                 case 1 -> {
                     Ramen ramen = new Ramen(promptForSize(), promptForBroth(), promptForNoodle());
@@ -87,7 +89,17 @@ public class UserInterface {
                     Appetizer appetizer = new Appetizer(promptForDrinkType());
                     order.addAppetizer(appetizer);
                 }
-                case 4 -> // checkout
+                case 4 -> {
+                    if(order.getTotal() != 0.0){
+                        System.out.println("Here is your order:\n" + order.getOrderSummary());
+                        if ((screenMenuValidation("Would you like to place your order now?\nPick 1 to confirm, 0 to cancel: ", yesNo)) == 1){
+                            ReceiptWriter receiptWriter = new ReceiptWriter();
+                            receiptWriter.saveReceipt(order);
+                        } else {
+                            return;
+                        }
+                    }
+                }
             }
         }
     }
@@ -137,8 +149,7 @@ public class UserInterface {
             }
             else {
                 meats.add(Topping.meat.values()[option-1]);
-                int[] valid2 = {1,0};
-                if ((screenMenuValidation("\tWould you like extra?\nPick 1 for yes, 0 for no: ", valid2)) == 1){
+                if ((screenMenuValidation("\tWould you like extra?\nPick 1 for yes, 0 for no: ", yesNo)) == 1){
                     meats.add(Topping.meat.values()[option-1]);
                 }
             }
@@ -160,8 +171,7 @@ public class UserInterface {
             }
             else {
                 vegetables.add(Topping.vegetable.values()[option-1]);
-                int[] valid2 = {1,0};
-                if ((screenMenuValidation("\tWould you like extra?\nPick 1 for yes, 0 for no: ", valid2)) == 1){
+                if ((screenMenuValidation("\tWould you like extra?\nPick 1 for yes, 0 for no: ", yesNo)) == 1){
                     vegetables.add(Topping.vegetable.values()[option-1]);
                 }
             }
@@ -183,8 +193,7 @@ public class UserInterface {
             }
             else {
                 premium.add(Topping.premium.values()[option-1]);
-                int[] valid2 = {1,0};
-                if ((screenMenuValidation("\tWould you like extra?\nPick 1 for yes, 0 for no: ", valid2)) == 1){
+                if ((screenMenuValidation("\tWould you like extra?\nPick 1 for yes, 0 for no: ", yesNo)) == 1){
                     premium.add(Topping.premium.values()[option-1]);
                 }
             }
