@@ -3,6 +3,7 @@ package com.pluralsight.items;
 import com.pluralsight.util.OrderItem;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Ramen implements OrderItem {
     public enum bowlSize{
@@ -156,6 +157,26 @@ public class Ramen implements OrderItem {
 
     @Override
     public String description(){
-        // desc of Ramen item
+        String baseDesc = (size != null ? (size.getName() + " - $" + size.getPrice()) : null) + ", " +
+                (brothType != null ? brothType.getName() : null) + ", " +
+                (noodleType != null ? noodleType.getName() : null);
+
+        String meatDesc = (meats == null) ? null : meats.stream()
+                .filter(Objects::nonNull)
+                .map(Topping.meat::getName)
+                .collect(Collectors.joining(", "));
+
+        String vegDesc = (vegetables == null) ? null : vegetables.stream()
+                .filter(Objects::nonNull)
+                .map(Topping.vegetable::getName)
+                .collect(Collectors.joining(", "));
+
+        // .map is the only one using lambda so each line is name and associated price but formated
+        String premiumDesc = (premiums == null || premiums.isEmpty()) ? null : premiums.stream()
+                .filter(Objects::nonNull)
+                .map(p -> p.getName() + " - $" + String.format("%.2f", p.getPrice()))
+                .collect(Collectors.joining("\n"));
+
+        return baseDesc + "\n" + meatDesc + "\n" + vegDesc + "\n" + premiumDesc;
     }
 }

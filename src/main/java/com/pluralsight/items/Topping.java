@@ -8,9 +8,9 @@ public class Topping{
         STEAK("4) Steak - thinly sliced flank steak", 0);
 
         private final String name;
-        private final int price;
+        private final double price;
 
-        meat(String name, int price){
+        meat(String name, double price){
             this.name = name;
             this.price = price;
         }
@@ -19,7 +19,7 @@ public class Topping{
             return name;
         }
 
-        public int getPrice(){
+        public double getPrice(){
             return price;
         }
     }
@@ -31,9 +31,9 @@ public class Topping{
         SHIITAKE("4) Shiitake - mushrooms with strong, smoky flavor", 0);
 
         private final String name;
-        private final int price;
+        private final double price;
 
-        vegetable(String name, int price){
+        vegetable(String name, double price){
             this.name = name;
             this.price = price;
         }
@@ -42,7 +42,7 @@ public class Topping{
             return name;
         }
 
-        public int getPrice(){
+        public double getPrice(){
             return price;
         }
     }
@@ -54,9 +54,9 @@ public class Topping{
         NATTO("4) Natto - fermented soybeans", 1);
 
         private final String name;
-        private final int price;
+        private final double price;
 
-        premium(String name, int price){
+        premium(String name, double price){
             this.name = name;
             this.price = price;
         }
@@ -65,7 +65,7 @@ public class Topping{
             return name;
         }
 
-        public int getPrice(){
+        public double getPrice(){
             return price;
         }
     }
