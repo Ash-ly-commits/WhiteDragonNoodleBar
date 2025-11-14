@@ -4,14 +4,14 @@ import com.pluralsight.util.OrderItem;
 
 public class Drink implements OrderItem {
     public enum drinkSize{
-        SMALL("1. Small - 16 fl oz", 0),
-        MEDIUM("2. Medium - 20 fl oz", 0),
-        LARGE("3. Large - 24 fl oz", 2);
+        SMALL("Small - 16 fl oz", 0),
+        MEDIUM("Medium - 20 fl oz", 0),
+        LARGE("Large - 24 fl oz", 2);
 
         private final String name;
-        private final int price;
+        private final double price;
 
-        drinkSize(String name, int price){
+        drinkSize(String name, double price){
             this.name = name;
             this.price = price;
         }
@@ -20,26 +20,29 @@ public class Drink implements OrderItem {
             return name;
         }
 
-        public int getPrice(){
+        public double getPrice(){
             return price;
         }
+
+        public String toString(){
+            return name + ((price>0) ? " (+$" + String.format("%.2f",price) + ")" : ""); }
     }
 
     public enum drinkType{
-        WATER("1. Water",0),
-        COKE("2. Coke (NOT Diet)",3),
-        PEPSI("3. Pepsi (NOT Diet)",3),
-        MATCHA("4. Matcha - warm",6),
-        RAMUNE("5. Ramune - Japanese citrus soft drink",4),
-        SAPPORO("6. Sapporo - Japanese lager",7),
-        ASAHI("7. Asahi Super Dry - Japanese pale lager",7),
-        SAKE("8. Sake - Japanese alcohol",7),
-        SOJU("9. Soju - Korean distilled spirit",7);
+        WATER("Water",0),
+        COKE("Coke (NOT Diet)",3),
+        PEPSI("Pepsi (NOT Diet)",3),
+        MATCHA("Matcha - warm",6),
+        RAMUNE("Ramune - Japanese citrus soft drink",4),
+        SAPPORO("Sapporo - Japanese lager",7),
+        ASAHI("Asahi Super Dry - Japanese pale lager",7),
+        SAKE("Sake - Japanese alcohol",7),
+        SOJU("Soju - Korean distilled spirit",7);
 
         private final String name;
-        private final int price;
+        private final double price;
 
-        drinkType(String name, int price){
+        drinkType(String name, double price){
             this.name = name;
             this.price = price;
         }
@@ -48,8 +51,12 @@ public class Drink implements OrderItem {
             return name;
         }
 
-        public int getPrice(){
+        public double getPrice(){
             return price;
+        }
+
+        public String toString(){
+            return name + " $" + String.format("%.2f",price);
         }
     }
 
@@ -61,14 +68,6 @@ public class Drink implements OrderItem {
         this.size = drinkSize.values()[size-1];
     }
 
-    public drinkType getType() {
-        return type;
-    }
-
-    public drinkSize getSize() {
-        return size;
-    }
-
     @Override
     public double price(){
         return (type != null? type.getPrice() : 0.0) +
@@ -77,8 +76,8 @@ public class Drink implements OrderItem {
 
     @Override
     public String description(){
-        return (type == null)? null :
-                (type.getName() + " - $" + type.getPrice()) + ",\n" +
-                (size.getName() + " - $" + size.getPrice());
+        return (type == null)? "No drink." :
+                (type.getName() + " - $" + String.format("%.2f",type.getPrice())) + ",\n" +
+                (size.getName() + ((size.getPrice()>0) ? " - $" + String.format("%.2f", size.getPrice()) : ""));
     }
 }

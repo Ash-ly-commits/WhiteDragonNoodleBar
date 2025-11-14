@@ -4,18 +4,18 @@ import com.pluralsight.util.OrderItem;
 
 public class Appetizer implements OrderItem {
     public enum appetizerType{
-        EDAMAME("1. Edamame - steamed young soybeans",4),
-        YAKITORI("2. Yakitori - grilled, skewered chicken",6),
-        TEMPURA("3. Shrimp tempura - deep-fried shrimp",6),
-        GYOZA("4. Gyoza - Japanese dumplings",6),
-        TOFU("5. Tofu - soybean based",3),
-        ONIGIRI("6. Onigiri - Japanese rice balls with tuna and salmon",3),
-        FRIEDRICE("7. Fried Rice - stir-fried rice with eggs and vegetables",6);
+        EDAMAME("Edamame - steamed young soybeans",4),
+        YAKITORI("Yakitori - grilled, skewered chicken",6),
+        TEMPURA("Shrimp tempura - deep-fried shrimp",6),
+        GYOZA("Gyoza - Japanese dumplings",6),
+        TOFU("Tofu - soybean based",3),
+        ONIGIRI("Onigiri - Japanese rice balls with tuna and salmon",3),
+        FRIEDRICE("Fried Rice - stir-fried rice with eggs and vegetables",6);
 
         private final String name;
-        private final int price;
+        private final double price;
 
-        appetizerType(String name, int price){
+        appetizerType(String name, double price){
             this.name = name;
             this.price = price;
         }
@@ -24,8 +24,12 @@ public class Appetizer implements OrderItem {
             return name;
         }
 
-        public int getPrice(){
+        public double getPrice(){
             return price;
+        }
+
+        public String toString() {
+            return name + " $" + String.format("%.2f",price);
         }
     }
 
@@ -35,17 +39,12 @@ public class Appetizer implements OrderItem {
         this.type = appetizerType.values()[type-1];
     }
 
-    public appetizerType getType() {
-        return type;
-    }
-
     @Override
     public double price(){
         return (type != null? type.getPrice() : 0.0);
     }
-
     @Override
-    public String description(){
-        return (type != null)? (type.getName() + " - $" + type.getPrice()) : null;
+    public String description() {
+        return type.getName() + " - " + String.format("$%.2f", type.getPrice());
     }
 }

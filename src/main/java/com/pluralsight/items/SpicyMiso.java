@@ -26,44 +26,4 @@ public class SpicyMiso extends Ramen{
 
         setSpicy(true);
     }
-
-    // customization helpers
-//    public void addMeat(Topping.meat m) {
-//        List<Topping.meat> list = getMeats();
-//        if (list == null) {
-//            list = new ArrayList<>();
-//            setMeats(list); }
-//        list.add(m);
-//    }
-//
-//    public void removeMeat(Topping.meat m) {
-//        List<Topping.meat> list = getMeats();
-//        if (list != null) list.remove(m);
-//    }
-//
-//    public void addVegetables(Topping.vegetable v) {
-//        List<Topping.vegetable> list = getVegetables();
-//        if (list == null) {
-//            list = new ArrayList<>();
-//            setVegetables(list); }
-//        list.add(v);
-//    }
-//
-//    public void removeVegetables(Topping.vegetable v) {
-//        List<Topping.vegetable> list = getVegetables();
-//        if (list != null) list.remove(v);
-//    }
-//
-//    public void addPremium(Topping.premium p) {
-//        List<Topping.premium> list = getPremiums();
-//        if (list == null) {
-//            list = new ArrayList<>();
-//            setPremiums(list); }
-//        list.add(p);
-//    }
-//
-//    public void removePremium(Topping.premium p){
-//        List<Topping.premium> list = getPremiums();
-//        if (list != null) list.remove(p);
-//    }
 }

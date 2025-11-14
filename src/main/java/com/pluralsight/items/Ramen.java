@@ -7,14 +7,14 @@ import java.util.stream.Collectors;
 
 public class Ramen implements OrderItem {
     public enum bowlSize{
-        SMALL("1. Small - 27 fl oz", 10),
-        MEDIUM("2. Medium - 35 fl oz", 15),
-        LARGE("3. Large - 43 fl oz", 20);
+        SMALL("Small - 27 fl oz", 10),
+        MEDIUM("Medium - 35 fl oz", 15),
+        LARGE("Large - 43 fl oz", 20);
 
         private final String name;
-        private final int price;
+        private final double price;
 
-        bowlSize(String name, int price){
+        bowlSize(String name, double price){
             this.name = name;
             this.price = price;
         }
@@ -23,20 +23,24 @@ public class Ramen implements OrderItem {
             return name;
         }
 
-        public int getPrice(){
+        public double getPrice(){
             return price;
+        }
+
+        public String toString(){
+            return name + " $" + String.format("%.2f",price);
         }
     }
     public enum broth{
-        TONKOTSU("1. Tonkotsu - made from pork bone", 0),
-        SHIO("2. Shio - salty & lighter", 0),
-        SHOYU("3. Shoyu - chicken stock infused with soy sauce",0),
-        MISO("4. Miso - made from fermented soybean paste", 0);
+        TONKOTSU("Tonkotsu - made from pork bone", 0),
+        SHIO("Shio - salty & lighter", 0),
+        SHOYU("Shoyu - chicken stock infused with soy sauce",0),
+        MISO("Miso - made from fermented soybean paste", 0);
 
         private final String name;
-        private final int price;
+        private final double price;
 
-        broth(String name, int price){
+        broth(String name, double price){
             this.name = name;
             this.price = price;
         }
@@ -45,21 +49,25 @@ public class Ramen implements OrderItem {
             return name;
         }
 
-        public int getPrice(){
+        public double getPrice(){
             return price;
+        }
+
+        public String toString(){
+            return name;
         }
     }
     public enum noodle{
-        REGULAR("1. Regular ramen noodle - springy, golden wheat", 0),
-        WHOLEWHEAT("2. Whole wheat ramen noodle - thicker", 0),
-        CRISPY("3. Crispy thin ramen noodle - fried", 0),
-        UDON("4. Udon noodle - thickest type", 0),
-        SOBA("5. Soba noodle - thinner but firmer", 0);
+        REGULAR("Regular ramen noodle - springy, golden wheat", 0),
+        WHOLEWHEAT("Whole wheat ramen noodle - thicker", 0),
+        CRISPY("Crispy thin ramen noodle - fried", 0),
+        UDON("Udon noodle - thickest type", 0),
+        SOBA("Soba noodle - thinner but firmer", 0);
 
         private final String name;
-        private final int price;
+        private final double price;
 
-        noodle(String name, int price){
+        noodle(String name, double price){
             this.name = name;
             this.price = price;
         }
@@ -68,10 +76,15 @@ public class Ramen implements OrderItem {
             return name;
         }
 
-        public int getPrice(){
+        public double getPrice(){
             return price;
         }
+
+        public String toString(){
+            return name;
+        }
     }
+
     //parts of Ramen, add more getters in a bit & maybe make some final?
     private final bowlSize size;
     private final broth brothType;
@@ -80,12 +93,14 @@ public class Ramen implements OrderItem {
     private List<Topping.vegetable> vegetables;
     private List<Topping.premium> premiums;
     private boolean spicy;
+
     //constructor establishing base
     public Ramen(int size, int brothType, int noodleType){
         this.size = bowlSize.values()[size-1];
         this.brothType = broth.values()[brothType-1];
         this.noodleType = noodle.values()[noodleType-1];
     }
+
     // setters
     public void setSpicy(boolean input){
         this.spicy = input;
@@ -103,22 +118,6 @@ public class Ramen implements OrderItem {
         this.premiums = premiums;
     }
 
-    public bowlSize getSize() {
-        return size;
-    }
-
-    public broth getBrothType() {
-        return brothType;
-    }
-
-    public noodle getNoodleType() {
-        return noodleType;
-    }
-
-    public boolean isSpicy() {
-        return spicy;
-    }
-
     public List<Topping.meat> getMeats() {
         return meats;
     }
@@ -129,6 +128,10 @@ public class Ramen implements OrderItem {
 
     public List<Topping.premium> getPremiums() {
         return premiums;
+    }
+
+    public boolean isSpicy(){
+        return spicy;
     }
 
     @Override
@@ -157,26 +160,28 @@ public class Ramen implements OrderItem {
 
     @Override
     public String description(){
-        String baseDesc = (size != null ? (size.getName() + " - $" + size.getPrice()) : null) + ", " +
-                (brothType != null ? brothType.getName() : null) + ", " +
-                (noodleType != null ? noodleType.getName() : null);
+        String baseDesc = (size != null ? (size.getName() + " - $" + String.format("%.2f", size.getPrice())) : null)
+                + "\n" + (brothType != null ? brothType.getName() : null)
+                + "\n" + (noodleType != null ? noodleType.getName() : null);
 
-        String meatDesc = (meats == null) ? null : meats.stream()
+        String meatDesc = (meats == null) ? "No meat." : meats.stream()
                 .filter(Objects::nonNull)
                 .map(Topping.meat::getName)
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining("\n"));
 
-        String vegDesc = (vegetables == null) ? null : vegetables.stream()
+        String vegDesc = (vegetables == null) ? "No vegetables." : vegetables.stream()
                 .filter(Objects::nonNull)
                 .map(Topping.vegetable::getName)
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining("\n"));
 
         // .map is the only one using lambda so each line is name and associated price but formated
-        String premiumDesc = (premiums == null || premiums.isEmpty()) ? null : premiums.stream()
+        String premiumDesc = (premiums == null || premiums.isEmpty()) ? "No premium toppings." : premiums.stream()
                 .filter(Objects::nonNull)
                 .map(p -> p.getName() + " - $" + String.format("%.2f", p.getPrice()))
                 .collect(Collectors.joining("\n"));
 
-        return baseDesc + "\n" + meatDesc + "\n" + vegDesc + "\n" + premiumDesc;
+        String spicyDesc = (isSpicy()) ? "Spicy." : "Not spicy";
+
+        return baseDesc + "\n" + meatDesc + "\n" + vegDesc + "\n" + premiumDesc + "\n" + spicyDesc;
     }
 }

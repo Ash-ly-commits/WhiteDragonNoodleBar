@@ -29,15 +29,11 @@ public class UserInterface {
 
     // prints all enum options & gets a valid user choice
     private <E extends Enum<E>> E chooseEnum(E[] values, String prompt) {
-        for (E value : values) {
-            try {
-                System.out.println(value.getClass().getMethod("getName").invoke(value));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        System.out.print("\n");
+        for (int i = 0; i < values.length; i++) {
+            System.out.println((i+1) + ") " + values[i].toString());
         }
-        int[] validOptions = makeRangeArray(1, values.length);
-        int choice = chooseInt(prompt, validOptions);
+        int choice = chooseInt(prompt, makeRangeArray(1, values.length));
         return values[choice - 1];
     }
 
@@ -62,10 +58,11 @@ public class UserInterface {
     public void orderMenuScreen() {
         String orderMenu = """
                 \nOrder Options
-                1) Add Ramen
-                2) Add Drink
-                3) Add Appetizer
-                4) Checkout
+                1) Add Signature Ramen
+                2) Add Custom Ramen
+                3) Add Drink
+                4) Add Appetizer
+                5) Checkout
                 0) Cancel Order
                 Enter option:\t""";
         Order order = new Order();
@@ -111,7 +108,7 @@ public class UserInterface {
                 }
                 case 5 -> {
                     if (order.getTotal() == 0) continue;
-                    System.out.println("Here is your order:\n" + order.getOrderSummary());
+                    System.out.println("\nHere is your order:\n" + order.getOrderSummary());
                     int confirm = chooseInt("Place order?\nPick 1 if yes, 0 if no: ", yesNo);
                     if (confirm == 1) {
                         new ReceiptWriter().saveReceipt(order);
@@ -126,11 +123,27 @@ public class UserInterface {
     // Signature ramen selection
     private Ramen promptForSignature() {
         int option = chooseInt("""
-                \nSignature Specials:
-                1) Tonkotsu Deluxe
-                2) Spicy Miso
+                \nHere are our specials!
+                ------------------------------
+                - Tonkotsu Deluxe Special -
+                Medium bowl
+                Tonkotsu broth
+                Regular ramen noodle
+                Chashu, Shiitake, Nori, and Egg toppings!
+                Price: $16
+                
+                - Spicy Miso Special -
+                Medium bowl
+                Miso broth
+                Regular ramen noodle
+                Kakuni, Chashu, Spinach, Nori, Kimchi, and Egg toppings!
+                Price: $17
+                
+                Are you interested in ordering one?
+                1) Add Tonkotsu Deluxe
+                2) Add Spicy Miso
                 0) Back
-                Pick a number:\t""", makeRangeArray(0, 2));
+                Pick an option:\t""", makeRangeArray(0, 2));
         Ramen r = switch (option) {
             case 1 -> new TonkotsuDeluxe();
             case 2 -> new SpicyMiso();
@@ -142,11 +155,11 @@ public class UserInterface {
     // customize the signature ramen
     private Ramen customizeSignature(Ramen r) {
         while (true) {
-            System.out.println("\n--- Current Signature ---");
-            System.out.println(r.description());
+            System.out.println("\n- Current Signature -\n" + r.description());
             System.out.printf("Price: $%.2f%n", r.price());
             int choice = chooseInt("""
                     \nSignature Options:
+                    ---------------------
                     1) Remove Meat
                     2) Add Meat
                     3) Remove Vegetable
@@ -190,15 +203,11 @@ public class UserInterface {
     private <T extends Enum<T>> List<T> promptForToppings(T[] values, String prompt) {
         List<T> selected = new ArrayList<>();
         while (true) {
-            for (T value : values) {
-                try {
-                    System.out.println(value.getClass().getMethod("getName").invoke(value));
-                } catch (Exception e) {
-                    e.printStackTrace(); // err needs more robust logging
-                }
+            System.out.print("\n");
+            for (int i = 0; i < values.length; i++) {
+                System.out.println((i+1) + ") " + values[i].toString());
             }
-            int[] valid = makeRangeArray(0, values.length);
-            int choice = chooseInt(prompt, valid);
+            int choice = chooseInt(prompt,makeRangeArray(0, values.length));
             if (choice == 0) break;
             T picked = values[choice - 1];
             selected.add(picked);

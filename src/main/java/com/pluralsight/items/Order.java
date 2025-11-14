@@ -3,12 +3,13 @@ package com.pluralsight.items;
 import com.pluralsight.util.OrderItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Order {
-    private List<OrderItem> items;
+    private final List<OrderItem> items;
 
     public Order(){
         items = new ArrayList<>();
@@ -27,7 +28,7 @@ public class Order {
     }
 
     public double getTotal(){
-        return (items == null) ? 0.0 : items.stream()
+        return items.stream()
                 .filter(Objects::nonNull)
                 .mapToDouble(OrderItem::price)
                 .sum();
@@ -55,14 +56,19 @@ public class Order {
                 .collect(Collectors.toList());
     }
 
+    public List<OrderItem> getItems() { return Collections.unmodifiableList(items); }
+
     public String getOrderSummary() {
         StringBuilder sb = new StringBuilder();
         int count = 1;
         for (OrderItem i : items) {
-            sb.append(count).append(") ").append(i.description()).append("\n");
-            count++;
+            if (i != null) {
+                sb.append(count).append(") ").append(i.getClass().getSimpleName()).append("\n")
+                        .append(i.description()).append("\n\n");
+                count++;
+            }
         }
-        sb.append("\nTotal: $").append(String.format("%.2f", getTotal()));
+        sb.append("Total: $").append(String.format("%.2f", getTotal()));
         return sb.toString();
     }
 }
