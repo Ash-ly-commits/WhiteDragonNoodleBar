@@ -10,30 +10,41 @@ public class UserInterface {
     Scanner scanner = new Scanner(System.in);
     private final int[] yesNo = {1, 0};
 
-    public int askUserInt(String prompt) {
+    //Combines my previous menuScreenValidation() with askUserInt()
+    private int chooseInt(String prompt, int[] validOptions) {
         while (true) {
             try {
                 System.out.print(prompt);
-                int choice = scanner.nextInt();
+                int v = scanner.nextInt();
                 scanner.nextLine();
-                return choice;
-            } catch (Exception e) {
+                for (int opt : validOptions) if (opt == v) return v;
+                System.out.println("Invalid option, try again.");
+            } catch (Exception ex) {
                 System.out.println("Invalid input. Please enter a number.");
                 scanner.nextLine();
             }
         }
     }
 
-    public int screenMenuValidation(String prompt, int[] validOptions) {
-        while (true) {
-            int input = askUserInt(prompt);
-            for (int option : validOptions) {
-                if (input == option) {
-                    return input;
-                }
+    // prints all enum options & gets valid user choice
+    private <E extends Enum<E>> E chooseEnum(E[] values, String prompt) {
+        for (E value : values) {
+            try {
+                System.out.println(value.getClass().getMethod("getName").invoke(value));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            System.out.println("Invalid option, try again.");
         }
+        int[] validOptions = makeRangeArray(1, values.length);
+        int choice = chooseInt(prompt, validOptions);
+        return values[choice - 1];
+    }
+
+    // so I dont have to manually write each array of integers for valid menu options
+    private int[] makeRangeArray(int fromInclusive, int toInclusive) {
+        int[] a = new int[toInclusive - fromInclusive + 1];
+        for (int i = 0; i < a.length; i++) a[i] = fromInclusive + i;
+        return a;
     }
 
     public void homeScreen() {
@@ -43,16 +54,8 @@ public class UserInterface {
                 1) New Order
                 0) Exit
                 Enter option:\t"""; //this can be nicer later lol
-        int[] valid = {1, 0};
-        while (true) {
-            int option = screenMenuValidation(homeScreenMenu, valid);
-            if (option == 0) {
-                System.out.println("Exiting...");
-                break;
-            } else if (option == 1) {
-                orderMenuScreen();
-            }
-        }
+        while (chooseInt(homeScreenMenu, yesNo) != 0) orderMenuScreen();
+        System.out.println("Exiting...");
     }
 
     public void orderMenuScreen() {
@@ -64,166 +67,87 @@ public class UserInterface {
                 4) Checkout
                 0) Cancel Order
                 Enter option:\t""";
-        int[] valid = {0, 1, 2, 3, 4};
+        Order order = new Order();
         while (true) {
-            int option = screenMenuValidation(orderMenu, valid);
-            if (option == 0) {
-                System.out.println("Guess you're not hungry today...");
-                return;
-            }
-            Order order = new Order();
-            switch (option) { // cases are work in progress lol
+            int option = chooseInt(orderMenu, makeRangeArray(0,4));
+            switch (option) {
+                case 0 -> { System.out.println("Order cancelled."); return; }
                 case 1 -> {
-                    Ramen ramen = new Ramen(promptForSize(), promptForBroth(), promptForNoodle());
-                    ramen.setSpicy(promptForSpicy());
-                    ramen.setMeats(promptForMeats());
-                    ramen.setVegetables(promptForVegetables());
-                    ramen.setPremiums(promptForPremiumToppings());
-                    order.addRamen(ramen);
+                    Ramen r = new Ramen(
+                            chooseEnum(Ramen.bowlSize.values(), "Pick a bowl size: ").ordinal() + 1,
+                            chooseEnum(Ramen.broth.values(), "Pick a broth type: ").ordinal() + 1,
+                            chooseEnum(Ramen.noodle.values(), "Pick a noodle type: ").ordinal() + 1
+                    );
+                    r.setSpicy(chooseInt("Want it spicy?\nPick 1 if yes, 0 if no: ", yesNo) == 1);
+                    r.setMeats(promptForToppings(Topping.meat.values(), "Pick meat toppings (0 to stop): "));
+                    r.setVegetables(promptForToppings(Topping.vegetable.values(), "Pick vegetable toppings (0 to stop): "));
+                    r.setPremiums(promptForToppings(Topping.premium.values(), "Pick premium toppings (0 to stop): "));
+                    order.addRamen(r);
+                    System.out.println("Ramen order added.");
                 }
                 case 2 -> {
-                    Drink drink = new Drink(promptForDrinkType(), promptForDrinkSize());
-                    order.addDrink(drink);
+                    Drink d = new Drink(
+                            chooseEnum(Drink.drinkType.values(), "Pick a drink: ").ordinal() + 1,
+                            chooseEnum(Drink.drinkSize.values(), "Pick a drink size: ").ordinal() + 1
+                    );
+                    order.addDrink(d);
+                    System.out.println("Drink added.");
                 }
                 case 3 -> {
-                    Appetizer appetizer = new Appetizer(promptForDrinkType());
-                    order.addAppetizer(appetizer);
+                    Appetizer a = new Appetizer(chooseEnum(Appetizer.appetizerType.values(), "Pick an appetizer: ").ordinal() + 1);
+                    order.addAppetizer(a);
+                    System.out.println("Appetizer added.");
                 }
                 case 4 -> {
-                    if(order.getTotal() != 0.0){
-                        System.out.println("Here is your order:\n" + order.getOrderSummary());
-                        if ((screenMenuValidation("Would you like to place your order now?\nPick 1 to confirm, 0 to cancel: ", yesNo)) == 1){
-                            ReceiptWriter receiptWriter = new ReceiptWriter();
-                            receiptWriter.saveReceipt(order);
-                        } else {
-                            return;
-                        }
-                    }
+                    if (order.getTotal() == 0) continue;
+                    System.out.println("Here is your order:\n" + order.getOrderSummary());
+                    int confirm = chooseInt("Place order?\nPick 1 if yes, 0 if no: ", yesNo);
+                    if (confirm == 1) {
+                        new ReceiptWriter().saveReceipt(order);
+                        System.out.println("Order placed. Thank you!");
+                    } else System.out.println("Order cancelled.");
+                    return;
                 }
             }
         }
     }
 
-// set up for Ramen base
-    public int promptForSize() {
-        for (Ramen.bowlSize s : Ramen.bowlSize.values()) {
-            System.out.println(s.getName() + "  $" + s.getPrice());
+    // returns list for toppings (any of em its generic YIPPEEEE)
+    private <T extends Enum<T>> List<T> promptForToppings(T[] values, String prompt) {
+        List<T> selected = new ArrayList<>();
+        while (true) {
+            for (T value : values) {
+                try { System.out.println(value.getClass().getMethod("getName").invoke(value)); }
+                catch (Exception e) {
+                    e.printStackTrace(); }
+            }
+            int[] valid = makeRangeArray(0, values.length);
+            int choice = chooseInt(prompt, valid);
+            if (choice == 0) break;
+            T picked = values[choice - 1];
+            selected.add(picked);
+            if (chooseInt("Want extra?\nPick 1 if yes, 0 if no: ", yesNo) == 1) selected.add(picked);
         }
-        int[] valid = {1, 2, 3};
-        return screenMenuValidation("\tThese are the sizes and prices.\nPick a number: ", valid);
-    }
-
-    public int promptForBroth() {
-        for (Ramen.broth b : Ramen.broth.values()) {
-            System.out.println(b.getName());
-        }
-        int[] valid = {1, 2, 3, 4};
-        return screenMenuValidation("\tThese are the broth types.\nPick a number: ", valid);
-    }
-
-    public int promptForNoodle() {
-        for (Ramen.noodle n : Ramen.noodle.values()) {
-            System.out.println(n.getName());
-        }
-        int[] valid = {1, 2, 3, 4, 5};
-        return screenMenuValidation("\tThese are the noodle types.\nPick a number: ", valid);
-    }
-
-    public boolean promptForSpicy() {
-        int ask = askUserInt("Would you like your broth spicy?\nPick 1 for yes, 0 for no: ");
-        return ask == 1;
-    }
-
-    // returns list for toppings
-    public List<Topping.meat> promptForMeats(){
-        List<Topping.meat> meats = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            int[] valid = {0,1,2,3,4};
-            for(Topping.meat m: Topping.meat.values()){
-                System.out.println(m.getName());
-            }
-            int option = screenMenuValidation("\tThese are the meat options.\nPick a number or 0 if done: ",valid);
-            if (option == 0) {
-                System.out.println("Next option->");
-                break;
-            }
-            else {
-                meats.add(Topping.meat.values()[option-1]);
-                if ((screenMenuValidation("\tWould you like extra?\nPick 1 for yes, 0 for no: ", yesNo)) == 1){
-                    meats.add(Topping.meat.values()[option-1]);
-                }
-            }
-        }
-        return meats;
-    }
-
-    public List<Topping.vegetable> promptForVegetables(){
-        List<Topping.vegetable> vegetables = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            int[] valid = {0,1,2,3,4};
-            for(Topping.vegetable v: Topping.vegetable.values()){
-                System.out.println(v.getName());
-            }
-            int option = screenMenuValidation("\tThese are the vegetable options.\nPick a number or 0 if done: ",valid);
-            if (option == 0) {
-                System.out.println("Next option->");
-                break;
-            }
-            else {
-                vegetables.add(Topping.vegetable.values()[option-1]);
-                if ((screenMenuValidation("\tWould you like extra?\nPick 1 for yes, 0 for no: ", yesNo)) == 1){
-                    vegetables.add(Topping.vegetable.values()[option-1]);
-                }
-            }
-        }
-        return vegetables;
-    }
-
-    public List<Topping.premium> promptForPremiumToppings(){
-        List<Topping.premium> premium = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            int[] valid = {0,1,2,3,4};
-            for(Topping.premium p: Topping.premium.values()){
-                System.out.println(p.getName() + "  $" + p.getPrice());
-            }
-            int option = screenMenuValidation("\tThese are the premium topping options.\nPick a number or 0 if done: ",valid);
-            if (option == 0) {
-                System.out.println("Next option->");
-                break;
-            }
-            else {
-                premium.add(Topping.premium.values()[option-1]);
-                if ((screenMenuValidation("\tWould you like extra?\nPick 1 for yes, 0 for no: ", yesNo)) == 1){
-                    premium.add(Topping.premium.values()[option-1]);
-                }
-            }
-        }
-        return premium;
+        return selected;
     }
 
     // set up for drinks
-    public int promptForDrinkType(){
-        for(Drink.drinkType d: Drink.drinkType.values()){
+    public int promptForDrinkType() {
+        for (Drink.drinkType d : Drink.drinkType.values())
             System.out.println(d.getName() + " $" + d.getPrice());
-        }
-        int[] valid = {1,2,3};
-        return screenMenuValidation("\tThese are the drink options and cost.\nPick a number: ",valid);
+        return chooseInt("\tThese are the drink options and cost.\nPick a number: ", new int[]{1,2,3,4,5,6,7,8,9});
     }
 
-    public int promptForDrinkSize(){
-        for(Drink.drinkSize d: Drink.drinkSize.values()){
+    public int promptForDrinkSize() {
+        for (Drink.drinkSize d : Drink.drinkSize.values())
             System.out.println(d.getName() + " Additional $" + d.getPrice());
-        }
-        int[] valid = {1,2,3};
-        return screenMenuValidation("\tThese are the sizes and additional costs.\nPick a number: ",valid);
+        return chooseInt("\tThese are the sizes and additional costs.\nPick a number: ", new int[]{1,2,3});
     }
 
     // set up for appetizers
-    public int promptForAppetizer(){
-        for(Appetizer.appetizerType a: Appetizer.appetizerType.values()){
+    public int promptForAppetizer() {
+        for (Appetizer.appetizerType a : Appetizer.appetizerType.values())
             System.out.println(a.getName() + " $" + a.getPrice());
-        }
-        int[] valid = {1,2,3,4,5,6,7,8,9};
-        return screenMenuValidation("\tThese are the appetizer options and cost.\nPick a number: ",valid);
+        return chooseInt("\tThese are the appetizer options and cost.\nPick a number: ", makeRangeArray(1, Appetizer.appetizerType.values().length));
     }
 }
