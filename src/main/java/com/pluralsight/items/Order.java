@@ -20,5 +20,7 @@ public class Order {
         if (d != null) items.add(d);
     }
 
-    public void addAppetizer(){}
+    public void addAppetizer(Appetizer a){
+        if (a != null) items.add(a);
+    }
 }
