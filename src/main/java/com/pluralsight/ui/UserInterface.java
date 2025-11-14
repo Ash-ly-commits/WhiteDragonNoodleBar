@@ -83,7 +83,10 @@ public class UserInterface {
                     Drink drink = new Drink(promptForDrinkType(), promptForDrinkSize());
                     order.addDrink(drink);
                 }
-                case 3 -> // add Appetizer
+                case 3 -> {
+                    Appetizer appetizer = new Appetizer(promptForDrinkType());
+                    order.addAppetizer(appetizer);
+                }
                 case 4 -> // checkout
             }
         }
