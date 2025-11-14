@@ -3,10 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.pluralsight.items.Drink;
-import com.pluralsight.items.Order;
-import com.pluralsight.items.Ramen;
-import com.pluralsight.items.Topping;
+import com.pluralsight.items.*;
 
 public class UserInterface {
     Scanner scanner = new Scanner(System.in);
@@ -204,5 +201,14 @@ public class UserInterface {
         }
         int[] valid = {1,2,3};
         return screenMenuValidation("\tThese are the sizes and additional costs.\nPick a number: ",valid);
+    }
+
+    // set up for appetizers
+    public int promptForAppetizer(){
+        for(Appetizer.appetizerType a: Appetizer.appetizerType.values()){
+            System.out.println(a.getName() + " $" + a.getPrice());
+        }
+        int[] valid = {1,2,3,4,5,6,7,8,9};
+        return screenMenuValidation("\tThese are the appetizer options and cost.\nPick a number: ",valid);
     }
 }
