@@ -41,7 +41,7 @@ public class Appetizer implements OrderItem {
 
     @Override
     public double price(){
-        // price wow
+        return (type != null? type.getPrice() : 0.0);
     }
 
     @Override

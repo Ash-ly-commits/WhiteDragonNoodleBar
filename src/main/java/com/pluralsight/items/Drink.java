@@ -71,7 +71,8 @@ public class Drink implements OrderItem {
 
     @Override
     public double price(){
-        // price
+        return (type != null? type.getPrice() : 0.0) +
+                (size != null? size.getPrice() : 0.0);
     }
 
     @Override
