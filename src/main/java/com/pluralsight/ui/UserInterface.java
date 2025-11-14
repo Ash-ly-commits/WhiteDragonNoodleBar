@@ -2,6 +2,8 @@ package com.pluralsight.ui;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import com.pluralsight.items.Drink;
 import com.pluralsight.items.Order;
 import com.pluralsight.items.Ramen;
 import com.pluralsight.items.Topping;
@@ -80,7 +82,10 @@ public class UserInterface {
                     ramen.setPremiums(promptForPremiumToppings());
                     order.addRamen(ramen);
                 }
-                case 2 -> // add Drink
+                case 2 -> {
+                    Drink drink = new Drink(promptForDrinkType(), promptForDrinkSize());
+                    order.addDrink(drink);
+                }
                 case 3 -> // add Appetizer
                 case 4 -> // checkout
             }
@@ -183,5 +188,21 @@ public class UserInterface {
             }
         }
         return premium;
+    }
+    // set up for drinks
+    public int promptForDrinkType(){
+        for(Drink.drinkType b: Drink.drinkType.values()){
+            System.out.println(b.getName() + " $" + b.getPrice());
+        }
+        int[] valid = {1,2,3};
+        return screenMenuValidation("\tThese are the drink options and cost.\nPick a number: ",valid);
+    }
+
+    public int promptForDrinkSize(){
+        for(Drink.drinkSize b: Drink.drinkSize.values()){
+            System.out.println(b.getName() + " Additional $" + b.getPrice());
+        }
+        int[] valid = {1,2,3};
+        return screenMenuValidation("\tThese are the sizes and additional costs.\nPick a number: ",valid);
     }
 }

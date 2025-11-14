@@ -16,7 +16,9 @@ public class Order {
         if (r != null) items.add(r);
     }
 
-    public void addDrink(){}
+    public void addDrink(Drink d){
+        if (d != null) items.add(d);
+    }
 
     public void addAppetizer(){}
 }
