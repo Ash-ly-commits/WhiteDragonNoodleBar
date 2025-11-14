@@ -77,6 +77,8 @@ public class Drink implements OrderItem {
 
     @Override
     public String description(){
-        // Drink description
+        return (type == null)? null
+                : (type.getName() + " - $" + type.getPrice()) + ",\n" +
+                (size.getName() + " - $" + size.getPrice());
     }
 }

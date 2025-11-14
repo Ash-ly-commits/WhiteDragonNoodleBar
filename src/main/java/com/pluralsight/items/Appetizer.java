@@ -46,6 +46,6 @@ public class Appetizer implements OrderItem {
 
     @Override
     public String description(){
-        // description of app
+        return (type != null)? (type.getName() + " - $" + type.getPrice()) : null;
     }
 }
